@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise Method Ajax</title>
+</head>
+<body>
+    <table>
+        <tbody>
+            <tr>
+                <td>Id : </td>
+                <td id="id"></td>
+            </tr>
+            <tr>
+                <td>Name: </td>
+                <td id="name"></td>
+            </tr>
+            <tr>
+                <td>Price : </td>
+                <td id="price"></td>
+            </tr>
+        </tbody>    
+    </table>
+    <script>
+        function getProduk(produk){
+            return new Promise(function(resolve,reject){
+            const ajax = new XMLHttpRequest();
+            ajax.open("GET",`api/${produk}.json`);
+            ajax.onload = function(){
+                if(ajax.status === 200){
+                    resolve(ajax.responseText);
+                }else{
+                    reject(`Error Gety Product with response ${ajax.status} `);
+                }
+            }
+            ajax.send();
+        });
+        }
+
+        // Ambil semua promise
+
+        // const promise = Promise.all([
+        //     getProduk("produk1"),
+        //     getProduk("produk2"),
+        //     getProduk("produk3"),
+        // ]);
+
+        // promise.then(function(produk){
+        //     console.info(produk);
+        // })
+
+        //Ambil salah satu promise yang paling cepat
+
+        // const promise = Promise.any([
+        //     getProduk("produk1"),
+        //     getProduk("produk2"),
+        //     getProduk("produk3"),
+        // ]);
+
+        // promise.then(function(produk){
+        //     console.info(produk);
+        // })
+        
+
+        // Ambil promise yang menunggu dan ambil yang paling pertama
+        const promise = Promise.race([
+            getProduk("produk1"),
+            getProduk("produk2"),
+            getProduk("produk3"),
+        ]);
+
+        promise.then(function(produk){
+            console.info(produk);
+        })
+    </script>
+</body>
+</html>
